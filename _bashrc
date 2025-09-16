@@ -1,0 +1,48 @@
+bash_prompt_command() {
+  #gather system information
+  termwidth=${COLUMNS}
+  username=$USER;
+  hostname=`hostname`
+  for ((i=0; i<${#hostname}; i++))
+  do
+  if [ ${hostname:$i:1} == "." ]
+  then
+  break
+  fi
+  done
+  hostname=${hostname:0:${i}}
+  pathname=`pwd`/
+  length=$(( ${termwidth}-${#username}-${#hostname}-${#pathname}-16 ))
+  if [ ${length} -lt "0" ]
+  then length="0"
+  fi
+  line='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+}
+
+                                                                                                                           bash_prompt() {
+local NONE='\[\033[0m\]'    # unsets color to term's fg color
+# regular colors
+local K='\[\033[0;30m\]'    # black
+local R='\[\033[0;31m\]'    # red
+local G='\[\033[0;32m\]'    # green
+local Y='\[\033[0;33m\]'    # yellow
+local B='\[\033[0;34m\]'    # blue
+local M='\[\033[0;35m\]'    # magenta
+local C='\[\033[0;36m\]'    # cyan
+local W='\[\033[0;37m\]'    # white
+# empahsized (bolded) colors
+local EMW='\[\033[1;37m\]'
+PS1=""
+PS1="${PS1}${EMW}\${line:0:1}${EMW}[${R}\t${EMW}]"
+PS1="${PS1}${EMW}\${line:0:1}[${Y}\${username}${W}@"
+PS1="${PS1}${EMW}${G}\${hostname}${EMW}:"
+PS1="${PS1}${EMW}${C}\${pathname}${EMW}]"
+PS1="${PS1}${EMW}\${line:0:\${length}}\n${NONE}\$"
+}
+shopt -s checkwinsize
+PROMPT_COMMAND=bash_prompt_command
+bash_prompt
+unset bash_prompt
+
+export VISUAL=vim
+export EDITOR=vim
