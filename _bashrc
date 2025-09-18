@@ -3,23 +3,18 @@ bash_prompt_command() {
   termwidth=${COLUMNS}
   username=$USER;
   hostname=`hostname`
-  for ((i=0; i<${#hostname}; i++))
-  do
-  if [ ${hostname:$i:1} == "." ]
-  then
-  break
+  if [ -f /.dockerenv ]; then
+    hostname="${hostname}:docker"
   fi
-  done
-  hostname=${hostname:0:${i}}
   pathname=`pwd`/
   length=$(( ${termwidth}-${#username}-${#hostname}-${#pathname}-16 ))
   if [ ${length} -lt "0" ]
-  then length="0"
+    then length="0"
   fi
   line='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 }
 
-                                                                                                                           bash_prompt() {
+bash_prompt() {
 local NONE='\[\033[0m\]'    # unsets color to term's fg color
 # regular colors
 local K='\[\033[0;30m\]'    # black
@@ -46,3 +41,7 @@ unset bash_prompt
 
 export VISUAL=vim
 export EDITOR=vim
+
+export DEBUG=true
+export TRITON_DIR=$(realpath ~/repos/triton)
+export TRITON_BUILD_DIR="${TRITON_DIR}/python/build"
